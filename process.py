@@ -6,6 +6,7 @@ data = psutil.pids()
 for i in data:
     try:        
         temp = psutil.Process(i)
-        print(temp.name())
+        if(temp.name()=='Code.exe' and temp.status()=='running'):
+            print(temp.name())
     except:
         continue
