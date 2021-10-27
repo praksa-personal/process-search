@@ -7,23 +7,38 @@ import datetime
 #print(psutil.Process(pid_current))
 
 def start_time(process):
-    data = psutil.pids()
-    for i in data:
-        try:        
-            temp = psutil.Process(i)
-            #if(temp.name()=='Code.exe' and temp.status()=='running'):
-                #print(temp.children(recursive=True),"\n")
-                #print(temp.started()) #should be time, ali ne zeli
-            if(temp.name()==process):
-                print(temp)  
-                time = temp.create_time()
-                formated = datetime.datetime.fromtimestamp(time).strftime("%Y-%m-%d %H:%M:%S")
-                print(formated)
-                
-        except:
-            continue
+    for proc in psutil.process_iter():   
+        if(proc.name()==process):
+            print(proc)  
+            time = proc.create_time()
+            formated = datetime.datetime.fromtimestamp(time).strftime("%Y-%m-%d %H:%M:%S")
+            print(formated)
+
+
+def info():
+    for proc in psutil.process_iter(['pid', 'name']):
+        print(proc.info)
+
+def on_terminate(proc):
+    print("process {} terminated".format(proc))
+
+def get_pid(PROCNAME):
+    for proc in psutil.process_iter():
+        if proc.name() == PROCNAME:
+           return proc.pid
+    return -1
 
 
 if __name__ == '__main__':
-    name = 'test_process.exe'
-    start_time(name)
+    start_time('test_process.exe')
+    #info()
+
+    #postman pid
+    proc_name = 'Postman.exe'
+    pid = get_pid(proc_name)
+    if(psutil.pid_exists(pid)):
+        procs_list = [psutil.Process(pid)]
+        # waits for multiple processes to terminate, 20 sec timeout
+        gone, alive = psutil.wait_procs(procs_list, timeout=20, callback=on_terminate)
+    else:
+        print("No process named {}".format(proc_name))
