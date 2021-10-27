@@ -1,5 +1,4 @@
 import psutil
-import os
 import datetime
 
 
@@ -20,7 +19,7 @@ def info():
         print(proc.info)
 
 def on_terminate(proc):
-    print("process {} terminated".format(proc))
+    print("Process {} terminated".format(proc))
 
 def get_pid(PROCNAME):
     for proc in psutil.process_iter():
@@ -38,6 +37,7 @@ if __name__ == '__main__':
     pid = get_pid(proc_name)
     if(psutil.pid_exists(pid)):
         procs_list = [psutil.Process(pid)]
+        print("Waiting for process {} to be terminated".format(proc_name))
         # waits for multiple processes to terminate, 20 sec timeout
         gone, alive = psutil.wait_procs(procs_list, timeout=20, callback=on_terminate)
     else:
