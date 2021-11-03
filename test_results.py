@@ -1,11 +1,13 @@
 import datetime
 import random
 
-def running_time(t1,t2):
-    #print("\n"+t1)
-    #print(t2)
+
+def running_time(t1, t2):
+    # print("\n"+t1)
+    # print(t2)
     FMT = '%H:%M:%S'
-    tdelta = datetime.datetime.strptime(t2, FMT) - datetime.datetime.strptime(t1, FMT)
+    tdelta = datetime.datetime.strptime(
+        t2, FMT) - datetime.datetime.strptime(t1, FMT)
     return tdelta
 
 
