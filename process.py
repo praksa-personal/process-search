@@ -1,17 +1,17 @@
 import psutil
 import datetime
-
-
+import os
 #pid_current = os.getpid()
 #print(psutil.Process(pid_current))
 
 def start_time(process):
     for proc in psutil.process_iter():   
         if(proc.name()==process):
-            print(proc)  
+            #print(proc)  
             time = proc.create_time()
-            formated = datetime.datetime.fromtimestamp(time).strftime("%Y-%m-%d %H:%M:%S")
-            print(formated)
+            formated = datetime.datetime.fromtimestamp(time).strftime("%H:%M:%S")
+            #print(formated)
+            return (formated,proc.pid,proc.name)
 
 
 def info():
@@ -28,17 +28,45 @@ def get_pid(PROCNAME):
     return -1
 
 
-if __name__ == '__main__':
-    start_time('test_process.exe')
-    #info()
+def delta_time(t1,t2):
+    print("\nStart time: ",t1)
+    print("End time: ",t2)
+            
+    FMT = '%H:%M:%S'
+    tdelta = datetime.datetime.strptime(t2, FMT) - datetime.datetime.strptime(t1, FMT)
+    print("Time to complete test:",tdelta)
 
-    #postman pid
-    proc_name = 'Postman.exe'
-    pid = get_pid(proc_name)
-    if(psutil.pid_exists(pid)):
-        procs_list = [psutil.Process(pid)]
-        print("Waiting for process {} to be terminated".format(proc_name))
-        # waits for multiple processes to terminate, 20 sec timeout
-        gone, alive = psutil.wait_procs(procs_list, timeout=20, callback=on_terminate)
-    else:
-        print("No process named {}".format(proc_name))
+if __name__ == '__main__':
+    test_pid=-1
+    flag = 0
+    
+    print("Start test? [y/n]")
+
+    x = input()
+    os.startfile("C:/Users/puntaric/Projekti/process-search/exe/dist/test.exe")
+  
+        
+    if(x == 'y'):
+        try:
+            test_start, test_pid, test_name = start_time('test.exe')
+            flag = 1
+        except:
+            ()
+
+        if(flag == 1):
+            procs_list = [psutil.Process(test_pid)]
+            print("Waiting for process {} to be terminated".format(test_name))
+            # waits for process to terminate, 20 sec timeout
+            gone, alive = psutil.wait_procs(procs_list, timeout=30, callback=on_terminate)
+            x = 'n'
+            test_end = datetime.datetime.now()
+            test_end = test_end.strftime("%H:%M:%S")
+
+            delta_time(test_start,test_end)
+
+        else:
+            print("No running test process")
+
+    
+    
+
