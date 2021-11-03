@@ -12,9 +12,7 @@ def running_time(t1,t2):
 def simulate_results():
     x = random.randint(0, 1)
     if(x):
-        topic = "testing/passed"
         res_str = "passed"
     else:
-        topic = "testing/failed"
         res_str = "failed"
-    return topic,res_str
+    return res_str
