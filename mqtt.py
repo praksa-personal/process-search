@@ -6,7 +6,7 @@ def on_publish(client, userdata, mid):
 
 def set_topic(res_str):
     if(res_str == "passed"):
-        return "testing/failed"
+        return "testing/passed"
     elif(res_str == "failed"):
         return "testing/failed"
     else:
